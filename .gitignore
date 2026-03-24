@@ -38,6 +38,10 @@ frontend/.env.production
 # macOS
 .DS_Store
 
+# Build context files
+*_context.txt
+*_built_context.txt
+
 # IDE
 .idea/
 .vscode/
