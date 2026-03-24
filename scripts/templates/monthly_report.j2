@@ -1,0 +1,45 @@
+{% set v = client_id | length % 3 %}
+###SECTION:executive_summary
+{% if v == 0 %}
+{{ company_name }} delivered a {{ blended_roas }}x blended ROAS in {{ report_month }}, driven by standout performance from "{{ top_campaign_name }}." With ${{ "{:,.0f}".format(total_spend) }} in total ad spend generating ${{ "{:,.0f}".format(total_revenue) }} in attributed revenue, the portfolio demonstrated strong efficiency across {{ channels | length }} active channels.
+
+The top-performing campaign — "{{ top_campaign_name }}" — achieved a {{ top_campaign_roas }}x ROAS on ${{ "{:,.0f}".format(top_campaign_spend) }} in spend, validating the audience and creative strategy deployed for that initiative. The best-performing segment, {{ best_segment_name }}, delivered a {{ "{:.2%}".format(best_segment_ctr) }} CTR and a {{ "{:.2%}".format(best_segment_cvr) }} conversion rate, outperforming portfolio benchmarks.
+
+Of the {{ active_count + paused_count + completed_count }} campaigns tracked this period, {{ active_count }} remain active, {{ completed_count }} have completed their flight dates, and {{ paused_count }} are paused pending optimisation. Key opportunities for the next period include reallocating budget away from underperforming placements and expanding reach in the highest-converting audience segments.
+{% elif v == 1 %}
+The {{ report_month }} campaign portfolio for {{ company_name }} generated ${{ "{:,.0f}".format(total_revenue) }} in attributed revenue on ${{ "{:,.0f}".format(total_spend) }} in spend — a blended {{ blended_roas }}x ROAS. Total impressions reached {{ "{:,}".format(total_impressions) }} with {{ "{:,}".format(total_conversions) }} conversions recorded across all channels.
+
+Performance was anchored by "{{ top_campaign_name }}," which delivered a {{ top_campaign_roas }}x ROAS and represents a replicable template for future campaign builds. The {{ best_segment_name }} audience continued to over-index on conversion intent, achieving a {{ "{:.2%}".format(best_segment_cvr) }} conversion rate — {{ "%.1f"|format(best_segment_cvr / 0.025) }}x the {{ industry }} vertical average.
+
+Looking ahead, the {{ paused_count }} paused campaigns require creative refresh before reactivation. Budget reallocation toward the top two channels by ROAS should improve portfolio efficiency by an estimated 15–20% in the next period.
+{% else %}
+Across {{ active_count }} active campaigns, {{ company_name }} achieved a {{ blended_roas }}x blended ROAS in {{ report_month }}, supported by ${{ "{:,.0f}".format(total_spend) }} in ad investment. The overall CTR of {{ "{:.2%}".format(blended_ctr) }} reflects healthy engagement relative to {{ industry }} vertical norms, with {{ "{:,}".format(total_conversions) }} total conversions tracked.
+
+The standout performer this period was "{{ top_campaign_name }}," which generated a {{ top_campaign_roas }}x ROAS — the highest in the portfolio. Conversely, "{{ worst_campaign_name }}" at {{ worst_campaign_roas }}x ROAS presents an immediate optimisation opportunity; a creative refresh and audience narrowing are recommended before the next flight.
+
+The {{ best_segment_name }} segment continued to deliver outsized results with a {{ "{:.2%}".format(best_segment_ctr) }} CTR. Expanding reach within this segment through lookalike modeling is the single highest-leverage action available for the coming period.
+{% endif %}
+
+###SECTION:channel_performance
+{% for ch, stats in channel_summary.items() %}
+**{{ ch | replace("_", " ") | title }}**: The {{ ch | replace("_", " ") | title }} channel accounted for ${{ "{:,.0f}".format(stats.spend) }} in spend with a {{ stats.roas }}x ROAS, generating ${{ "{:,.0f}".format(stats.revenue) }} in attributed revenue. Impressions totalled {{ "{:,}".format(stats.impressions) }} with a {{ "{:.2%}".format(stats.ctr) }} CTR. {% if stats.roas > blended_roas %}This channel outperformed the portfolio average ({{ blended_roas }}x), and increased investment here is recommended.{% elif stats.roas < blended_roas * 0.8 %}This channel underperformed relative to the {{ blended_roas }}x portfolio average; budget reallocation and creative testing are advised.{% else %}Performance was in line with portfolio expectations; incremental testing of new creative formats is suggested.{% endif %}
+
+{% endfor %}
+
+###SECTION:audience_insights
+The {{ best_segment_name }} audience segment was the clear standout performer in {{ report_month }}, achieving a {{ "{:.2%}".format(best_segment_ctr) }} CTR and a {{ "{:.2%}".format(best_segment_cvr) }} conversion rate. This segment's engagement profile suggests strong intent alignment with the current creative messaging and channel mix. Expanding this audience through platform-native lookalike modeling is recommended as a priority action for the next period.
+
+Secondary segments demonstrated varied performance. Audiences with broader demographic targeting showed higher impression volumes but lower conversion rates, consistent with awareness-stage positioning. The data supports a funnel segmentation strategy: use broad audiences for top-of-funnel reach, and allocate conversion-optimised budget exclusively to the proven high-intent segments like {{ best_segment_name }}.
+
+###SECTION:budget_efficiency
+Total spend of ${{ "{:,.0f}".format(total_spend) }} was deployed across {{ channels | length }} channels with an average {{ blended_roas }}x return, generating ${{ "{:,.0f}".format(total_revenue) }} in attributed revenue. Budget pacing across the {{ active_count }} active campaigns has been broadly on track, with minor overpacing in high-performing placements reflecting demand-side optimisation by the platform algorithms.
+
+The campaign portfolio's overall cost-per-conversion stands at ${{ "{:,.2f}".format(total_spend / total_conversions) if total_conversions else "N/A" }}. Channel concentration risk is low given distribution across {{ channels | length }} platforms. For the next period, a 10–15% budget shift toward the highest-ROAS channel is recommended, funded by pausing the lowest-performing campaigns.
+
+###LIST:recommendations
+{% for obj in business_objectives %}
+- {{ obj }}
+{% endfor %}
+- Expand {{ best_segment_name }} audience via lookalike modeling on top converting platforms
+- Pause or refresh "{{ worst_campaign_name }}" — {{ worst_campaign_roas }}x ROAS is below acceptable threshold
+- A/B test new creative formats in the highest-spend channel to improve CTR beyond {{ "{:.2%}".format(blended_ctr) }}

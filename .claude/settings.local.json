@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ARGUS_PROFILES=develop .venv/bin/python -m pytest tests/integration/test_chat_route.py -v 2>&1)",
+      "Bash(ARGUS_PROFILES=develop .venv/bin/python -m pytest tests/ -v --tb=short -q)",
+      "Bash(ARGUS_PROFILES=develop .venv/bin/python -m pytest tests/unit/test_settings.py::test_health_endpoint -v)",
+      "Bash(ARGUS_PROFILES=develop .venv/bin/python scripts/ingest_seeds.py --client acme_corp 2>&1)"
+    ]
+  }
+}

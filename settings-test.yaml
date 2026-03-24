@@ -1,0 +1,18 @@
+# Test overrides — activated with: ARGUS_PROFILES=test
+
+pgvector:
+  host: localhost
+  database: argus_test
+
+neo4j:
+  uri: bolt://localhost:7687
+
+redis:
+  host: localhost
+
+auth:
+  enabled: false
+
+rate_limit:
+  requests_per_minute: 10000
+  requests_per_day: 1000000

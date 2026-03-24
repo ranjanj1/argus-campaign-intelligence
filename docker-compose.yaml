@@ -1,0 +1,94 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: argus
+      POSTGRES_USER: argus
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-argus}
+    volumes:
+      - ./local_data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U argus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  neo4j:
+    image: neo4j:5-community
+    ports:
+      - "7474:7474"   # browser UI
+      - "7687:7687"   # bolt
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-argus12345}
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_memory_pagecache_size: 512M
+      NEO4J_dbms_memory_heap_initial__size: 512M
+      NEO4J_dbms_memory_heap_max__size: 1G
+    volumes:
+      - ./local_data/neo4j:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p ${NEO4J_PASSWORD:-argus12345} 'RETURN 1'"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./local_data/redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Dev GUI tools (run with: docker compose --profile tools up -d) ──────────
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    profiles: ["tools"]
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./local_data/pgadmin:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    profiles: ["tools"]
+    ports:
+      - "5540:5540"
+    volumes:
+      - ./local_data/redisinsight:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # ── ARQ ingest worker ────────────────────────────────────────────────────────
+
+  arq-worker:
+    build: .
+    command: python -m arq argus.components.ingest.ingest_worker.WorkerSettings
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      ARGUS_PROFILES: ${ARGUS_PROFILES:-}
+    volumes:
+      - .:/app
+    working_dir: /app

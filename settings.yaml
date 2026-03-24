@@ -1,0 +1,77 @@
+llm:
+  mode: openai
+  model: gpt-4o
+  temperature: 0.1
+  max_tokens: 2048
+
+embedding:
+  provider: huggingface
+  model_name: nomic-ai/nomic-embed-text-v1.5
+  dimensions: 768
+
+pgvector:
+  host: localhost
+  port: 5432
+  database: argus
+  user: argus
+  password: ${POSTGRES_PASSWORD:argus}
+  tables:
+    - campaign_performance
+    - ad_copy_library
+    - audience_segments
+    - client_strategy_briefs
+    - monthly_reports
+    - budget_allocations
+
+neo4j:
+  uri: bolt://localhost:7687
+  user: neo4j
+  password: ${NEO4J_PASSWORD:argus12345}
+
+redis:
+  host: localhost
+  port: 6379
+  session_ttl: 1800
+  session_max_messages: 20
+  cache_ttl: 3600
+  cache_similarity_threshold: 0.92
+
+rate_limit:
+  requests_per_minute: 20
+  requests_per_day: 500
+
+token_budget:
+  total_context: 120000
+  system_prompt_reserve: 2000
+  history_reserve: 8000
+  chunks_reserve: 20000
+
+auth:
+  enabled: true
+  jwt_secret: ${JWT_SECRET:dev-secret-key-change-in-production}
+  jwt_algorithm: HS256
+  default_skill: all_campaigns
+  default_client_id: internal
+
+guardrails:
+  enabled: true
+  # Input checks
+  input_toxicity: true
+  input_toxicity_threshold: 0.75
+  ban_topics: true
+  ban_topics_list:
+    - competitor
+    - lawsuit
+    - litigation
+    - confidential
+    - hack
+    - exploit
+    - bypass
+    - jailbreak
+  anonymize_pii: true
+  token_limit: true
+  token_limit_max: 10000
+  # Output checks
+  output_toxicity: true
+  output_toxicity_threshold: 0.70
+  client_isolation: true

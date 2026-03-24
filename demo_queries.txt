@@ -1,0 +1,142 @@
+====================================================================
+ARGUS — DEMO QUERY SCENARIOS
+====================================================================
+Setup: ARGUS_PROFILES=develop, GPT-4o-mini, client = acme_corp
+====================================================================
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 1: Basic Campaign Performance (Vector only)
+Client: acme_corp | Skill: performance
+────────────────────────────────────────────────────────────────────
+1. What was the total spend and revenue for acme_corp campaigns?
+2. Which campaigns had the highest conversion rate?
+3. What is the average CTR across all acme_corp campaigns?
+4. Show me the top 3 campaigns by revenue.
+5. Which campaigns are currently active?
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 2: Graph Retrieval — ROAS / Metrics (Graph only)
+Client: acme_corp | Skill: performance
+────────────────────────────────────────────────────────────────────
+6.  Which campaigns had the best ROAS for acme_corp?
+7.  Which campaigns had the worst CPA?
+8.  Show me campaigns with ROAS above 5.
+9.  Compare CTR across all acme_corp campaigns.
+10. What is the average ROAS for acme_corp?
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 3: Audience Segments (Graph — triggers GET_SEGMENTS)
+Client: acme_corp | Skill: performance
+────────────────────────────────────────────────────────────────────
+11. What audience segments are targeted by acme_corp?
+12. Which audience segment is used the most across campaigns?
+13. What platforms are our audience segments on?
+14. Which campaigns target female shoppers?
+15. Show me all segments and their associated campaigns.
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 4: Strategy & Creative (Vector — strategy_brief + ad_copy)
+Client: acme_corp | Skill: creative
+────────────────────────────────────────────────────────────────────
+16. What is the marketing strategy for acme_corp?
+17. What ad copy themes are used in acme_corp campaigns?
+18. What A/B testing approach is mentioned in the strategy brief?
+19. What channels are prioritised in the strategy?
+20. Summarise the creative direction for acme_corp.
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 5: Budget (Vector — budget_allocations)
+Client: acme_corp | Skill: budget
+────────────────────────────────────────────────────────────────────
+21. What is the total budget allocated for acme_corp?
+22. Which campaign has the highest budget allocation?
+23. How is the budget split across channels?
+24. What is the monthly budget trend for acme_corp?
+25. Which campaigns are over or under budget?
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 6: Cross-collection (Vector + Graph combined)
+Client: acme_corp | Skill: all_campaigns
+────────────────────────────────────────────────────────────────────
+26. Which TikTok campaigns had the best ROAS and what audience did they target?
+27. How does the strategy brief align with actual campaign performance?
+28. Which campaigns underperformed vs their allocated budget?
+29. What is the relationship between audience segment and ROAS?
+30. Give me a full performance summary for acme_corp.
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 7: Client Switching — Data Isolation
+Switch client in sidebar to test each
+────────────────────────────────────────────────────────────────────
+31. (acme_corp)  Which campaigns had the best ROAS?
+32. (techflow)   Which campaigns had the best ROAS?
+33. (greenleaf)  Which campaigns had the best ROAS?
+34. (northstar)  Which campaigns had the best ROAS?
+    → Same question, different clients, different answers = isolation working
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 8: Semantic Cache Demo
+────────────────────────────────────────────────────────────────────
+35. Which campaigns had the best ROAS for acme_corp?
+    → Send it once (slow — hits LLM)
+36. What are the top performing campaigns by return on ad spend?
+    → Send again (fast — cache HIT, different wording same meaning)
+37. Show me acme_corp campaigns ranked by ROAS performance.
+    → Should still hit cache (semantically similar)
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 9: Guardrails Demo
+────────────────────────────────────────────────────────────────────
+38. Tell me about competitor pricing strategies.
+    → Should be blocked by ban_topics (competitor)
+39. What is acme_corp doing vs Google and Meta?
+    → May trigger ban_topics
+40. (Switch to techflow, ask about acme_corp data)
+    → Should be blocked by client isolation guardrail
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 10: Monthly Report Insights (Vector — monthly_reports)
+Client: acme_corp | Skill: executive
+────────────────────────────────────────────────────────────────────
+41. What were the key highlights from the monthly report?
+42. What recommendations were made in the last report?
+43. What KPIs were tracked in the monthly report?
+44. Were there any budget concerns raised in the report?
+45. Summarise the monthly performance report for acme_corp.
+
+
+────────────────────────────────────────────────────────────────────
+SCENARIO 11: Multi-client View (all_campaigns skill)
+Client: internal | Skill: all_campaigns
+────────────────────────────────────────────────────────────────────
+46. Which client had the highest overall ROAS?
+47. Compare campaign performance across all clients.
+48. Which client is spending the most on LinkedIn campaigns?
+49. Rank all clients by total revenue.
+50. Which client has the best CTR on TikTok?
+
+
+────────────────────────────────────────────────────────────────────
+DEMO TALKING POINTS
+────────────────────────────────────────────────────────────────────
+- Queries 6-10   : "This comes from Neo4j — structured graph traversal,
+                    not document search"
+- Queries 26-30  : "This combines both — vector finds the docs,
+                    graph adds structured metrics"
+- Queries 35-37  : "Watch the response time — semantic cache, not
+                    exact string match"
+- Queries 31-34  : "Same question, four clients, zero data crossover —
+                    enforced at the JWT + guardrail level"
+- Queries 38-40  : "Production safety — blocks competitor mentions and
+                    cross-client data leakage"
+====================================================================

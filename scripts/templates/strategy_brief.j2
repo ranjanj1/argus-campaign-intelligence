@@ -1,0 +1,51 @@
+{% set v = client_id | length % 3 %}
+###SECTION:client_background
+{% if v == 0 %}
+{{ company_name }} is a growth-stage {{ industry }} company seeking to scale customer acquisition through performance marketing channels. With a strong product-market fit established in its core demographic, the company is now focused on expanding reach, improving brand awareness among high-intent audiences, and driving measurable revenue through paid digital channels.
+
+The engagement with 2060 Digital was initiated to bring a data-driven, channel-agnostic perspective to {{ company_name }}'s digital marketing strategy. The agency's mandate spans paid social, paid search, and programmatic channels, with a focus on optimising toward agreed KPIs within a defined monthly budget envelope of ${{ "{:,.0f}".format(monthly_budget_min) }}–${{ "{:,.0f}".format(monthly_budget_max) }}.
+{% elif v == 1 %}
+{{ company_name }} operates in the competitive {{ industry }} space, where customer acquisition costs have been rising across all major digital channels. The company has a well-established customer base and positive brand equity, but has historically relied on organic channels to drive growth. Paid media has been underutilised relative to the opportunity.
+
+2060 Digital has been engaged to develop and execute a full-funnel paid media strategy designed to unlock new customer segments and improve marketing efficiency. The scope of work covers channel strategy, audience development, creative guidance, and performance reporting — all within a monthly investment of ${{ "{:,.0f}".format(monthly_budget_min) }}–${{ "{:,.0f}".format(monthly_budget_max) }}.
+{% else %}
+{{ company_name }} has built a strong foundation in the {{ industry }} vertical and is entering an aggressive growth phase. The company's core competitive advantages — product quality, brand trust, and customer satisfaction — provide a strong foundation for paid performance campaigns that can convert high-intent audiences at scale.
+
+The 2060 Digital engagement is structured around a ${{ "{:,.0f}".format(monthly_budget_min) }}–${{ "{:,.0f}".format(monthly_budget_max) }} monthly media investment across {{ primary_channels | join(", ") }}. The strategy prioritises measurable outcomes — customer acquisition cost, ROAS, and conversion volume — over vanity metrics like impressions and reach.
+{% endif %}
+
+###LIST:campaign_objectives
+{% for obj in business_objectives %}
+- {{ obj }}
+{% endfor %}
+
+###SECTION:target_audience
+The primary audience strategy targets {{ segments_summary | join("; ") }}. Each of these segments has been identified based on platform data, category purchase intent signals, and first-party customer matching. The highest-priority segments are those with demonstrated conversion intent and CPM efficiency within {{ industry }} category norms.
+
+Secondary audiences will be developed through retargeting (website visitors, social engagers, email list lookalikes) and broad prospecting campaigns designed to expand the top of the funnel. Audience exclusions will be applied systematically to avoid cannibalising organic traffic and existing customer re-purchase cycles.
+
+###SECTION:channel_strategy
+{% for ch in primary_channels %}
+**{{ ch | replace("_", " ") | title }}**: {% if "search" in ch %}Paid search captures bottom-funnel, high-intent queries directly related to {{ industry }} purchase decisions. Keywords will be structured around brand, category, and competitor terms, with smart bidding strategies optimised for conversion value. Expected ROAS range: consistent with category benchmarks given commercial intent of search audiences.{% elif "meta" in ch or "facebook" in ch or "social" in ch %}Meta (Facebook/Instagram) will serve as the primary prospecting and retargeting engine, leveraging Advantage+ audiences for prospecting and custom audiences for re-engagement. Creative will be tested in a structured A/B framework with 2-week rotation cycles.{% elif "linkedin" in ch %}LinkedIn provides unmatched access to professional demographics relevant to {{ industry }}. Sponsored content and lead gen forms will be the primary formats, with ABM-style targeting for enterprise opportunities. Higher CPMs are offset by superior lead quality.{% elif "tiktok" in ch %}TikTok enables cost-efficient reach among younger demographics. Native-format video creative is essential; repurposed static ads underperform significantly. A dedicated creative production cadence of 4 new assets per month is recommended.{% elif "email" in ch %}Email marketing will serve as a retention and re-engagement channel, complementing paid acquisition. Segmented flows for new subscribers, active customers, and lapsed purchasers will be developed in parallel with the paid strategy.{% else %}{{ ch | replace("_", " ") | title }} will serve as a supplementary channel focused on incremental reach among audiences not efficiently reachable through primary channels. Performance will be monitored weekly with a 30-day review gate.{% endif %}
+
+{% endfor %}
+
+###LIST:kpi_table
+ROAS | {{ "%.1f"|format(monthly_budget_min * 0.00003 + 2.5) }}x blended | Platform attribution + UTM tracking
+CPA | ${{ "{:,.0f}".format(monthly_budget_min * 0.001 + 45) }} | CRM / purchase event tracking
+CTR | {{ "%.2f"|format(0.015 + monthly_budget_min * 0.0000002) }}% | Platform click-through reporting
+Monthly Conversions | {{ "{:,}".format((monthly_budget_min / 80) | int) }} | GA4 + platform event tracking
+Cost per Lead | ${{ "{:,.0f}".format(monthly_budget_min * 0.0006 + 30) }} | CRM form submissions
+
+###SECTION:budget_rationale
+The ${{ "{:,.0f}".format(monthly_budget_min) }}–${{ "{:,.0f}".format(monthly_budget_max) }} monthly budget is allocated with a primary-channel bias toward the highest-intent formats: {{ primary_channels[0] | replace("_", " ") | title }} and {{ primary_channels[1] | replace("_", " ") | title }} together account for approximately 60% of spend. This reflects the principle that bottom and mid-funnel channels should be fully funded before allocating to awareness and upper-funnel placements.
+
+The remaining 40% is distributed across {{ primary_channels[2:] | join(", ") | replace("_", " ") }} for prospecting, retargeting, and retention. Budget will be reviewed at 30-day intervals; channels consistently underperforming against ROAS and CPA targets will have budget reallocated to outperforming placements within the same review cycle.
+
+###LIST:risk_mitigations
+- Platform policy changes (especially Meta and Google): Mitigation — diversified channel mix ensures no single platform accounts for more than 40% of spend. Creative library maintained to enable rapid response to policy-driven disapprovals.
+- Attribution degradation (iOS privacy, cookie deprecation): Mitigation — server-side event tracking and GA4 data-driven attribution implemented from campaign launch. First-party data collection prioritised via email capture and CRM integration.
+- Creative fatigue: Mitigation — structured A/B testing with mandatory 4-week creative rotation. Performance creative playbook developed from winning ad formats to accelerate future production cycles.
+
+###SECTION:success_timeline
+At 30 days, the focus is on data collection and baseline establishment — campaigns will be in learning phase, and performance metrics should not yet be evaluated against final KPI targets. At 60 days, the portfolio will have exited platform learning phases and optimisation decisions can be made with statistical confidence. Initial ROAS targets should be achievable for the bottom-funnel channels by this point. At 90 days, the full funnel — from awareness through conversion — will be operational and optimised. Blended ROAS targets, CPA goals, and monthly conversion volume targets should all be met or exceeded by the end of the 90-day ramp period, assuming budget continuity and timely creative delivery.

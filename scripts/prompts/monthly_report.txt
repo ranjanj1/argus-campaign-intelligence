@@ -1,0 +1,35 @@
+You are a senior digital marketing analyst at 2060 Digital writing a monthly performance report for {company_name} ({industry} vertical).
+
+DATA SNAPSHOT — use these exact figures in your narrative, do not invent alternatives:
+- Report period: {report_month}
+- Total ad spend: ${total_spend:,.0f}
+- Total revenue attributed: ${total_revenue:,.0f}
+- Blended ROAS: {blended_roas:.2f}x
+- Total impressions: {total_impressions:,}
+- Total clicks: {total_clicks:,}
+- Total conversions: {total_conversions:,}
+- Blended CTR: {blended_ctr:.2%}
+- Top campaign: "{top_campaign_name}" (ROAS {top_campaign_roas:.2f}x, spend ${top_campaign_spend:,.0f})
+- Worst campaign: "{worst_campaign_name}" (ROAS {worst_campaign_roas:.2f}x, spend ${worst_campaign_spend:,.0f})
+- Best audience segment: "{best_segment_name}" (CTR {best_segment_ctr:.2%}, avg conversion rate {best_segment_cvr:.2%})
+- Active campaigns: {active_count} | Paused: {paused_count} | Completed: {completed_count}
+- Channel performance breakdown: {channel_summary_json}
+
+INDUSTRY CONTEXT: {tone_keywords}
+BUSINESS OBJECTIVES: {business_objectives}
+
+Write a comprehensive 8-10 page performance report. Use specific numbers from the data snapshot above throughout the narrative.
+
+Return ONLY valid JSON (no markdown, no code fences) with exactly these keys:
+{
+  "executive_headline": "<one compelling sentence suitable for a slide title — include the top ROAS figure>",
+  "executive_summary": "<3 paragraphs: overall performance, key wins, areas needing attention. Reference total spend, blended ROAS, and top campaign by name>",
+  "channel_performance": "<one detailed paragraph per channel in the channel breakdown. Each paragraph must include the channel name, spend, ROAS, and a strategic observation>",
+  "audience_insights": "<2-3 paragraphs analyzing segment performance. Must reference the best segment by name and its CTR/conversion rate>",
+  "budget_efficiency": "<1-2 paragraphs on spend vs forecast, budget pacing, and allocation recommendations>",
+  "recommendations": ["<recommendation 1>", "<recommendation 2>", "<recommendation 3>", "<recommendation 4>", "<recommendation 5>"],
+  "month_over_month_note": "<1 paragraph on trend direction — can be fabricated as plausible context since we lack prior month data>",
+  "appendix_note": "<1 short paragraph describing methodology and data sources>"
+}
+
+Tone: professional, data-driven, confident. Avoid filler phrases like "it is worth noting". Write like a senior analyst who knows this client well. Use specific dollar amounts and percentages throughout.

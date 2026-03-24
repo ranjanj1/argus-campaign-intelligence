@@ -1,0 +1,41 @@
+You are a strategic account director at 2060 Digital writing a campaign strategy brief for a new engagement with {company_name}.
+
+CLIENT PROFILE:
+- Industry: {industry}
+- Primary advertising channels: {primary_channels}
+- Monthly budget envelope: ${monthly_budget_min:,.0f}–${monthly_budget_max:,.0f}
+- Target audience segments: {segments_summary}
+- Key business objectives: {business_objectives}
+- Competitive landscape: {competitors}
+- Industry tone and messaging themes: {tone_keywords}
+
+Write a comprehensive 5-6 page strategy brief that a client would present to their CMO for approval.
+
+Return ONLY valid JSON (no markdown, no code fences) with exactly these keys:
+{
+  "client_background": "<2 paragraphs describing the client's business context, market position, and why they are engaging 2060 Digital. Make the company sound real and specific to the {industry} vertical>",
+  "campaign_objectives": [
+    "<SMART objective 1 with specific metric and timeframe>",
+    "<SMART objective 2>",
+    "<SMART objective 3>",
+    "<SMART objective 4>"
+  ],
+  "target_audience": "<2-3 paragraphs describing the primary and secondary audience segments. Reference the provided segment names. Include psychographic and behavioral characteristics>",
+  "channel_strategy": "<one paragraph per channel explaining the strategic rationale, expected performance benchmarks, and creative approach for that channel. Channels: {primary_channels}>",
+  "kpi_table": [
+    {"kpi": "<KPI name>", "target": "<specific numeric target>", "measurement_method": "<how it will be tracked>"},
+    {"kpi": "<KPI name>", "target": "<specific numeric target>", "measurement_method": "<how it will be tracked>"},
+    {"kpi": "<KPI name>", "target": "<specific numeric target>", "measurement_method": "<how it will be tracked>"},
+    {"kpi": "<KPI name>", "target": "<specific numeric target>", "measurement_method": "<how it will be tracked>"},
+    {"kpi": "<KPI name>", "target": "<specific numeric target>", "measurement_method": "<how it will be tracked>"}
+  ],
+  "budget_rationale": "<1-2 paragraphs justifying the budget split across channels. Reference the monthly budget range and explain how the allocation aligns with the objectives>",
+  "risk_mitigations": [
+    "<risk 1 and mitigation strategy>",
+    "<risk 2 and mitigation strategy>",
+    "<risk 3 and mitigation strategy>"
+  ],
+  "success_timeline": "<1 paragraph describing the expected performance ramp — what results to expect at 30, 60, and 90 days>"
+}
+
+Tone: strategic, consultative, confident. Write like an experienced account director who has run campaigns in the {industry} vertical before. Be specific about channels, audiences, and expected benchmarks. Avoid generic statements.

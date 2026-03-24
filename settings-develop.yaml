@@ -1,0 +1,29 @@
+# Dev overrides — activated with: ARGUS_PROFILES=develop
+# Merged on top of settings.yaml at startup
+
+pgvector:
+  host: localhost
+
+neo4j:
+  uri: bolt://localhost:7687
+
+redis:
+  host: localhost
+
+rate_limit:
+  requests_per_minute: 1000   # effectively unlimited in dev
+  requests_per_day: 100000
+
+auth:
+  enabled: false              # JWT validation skipped in dev
+  default_client_id: acme_corp
+
+llm:
+  mode: ollama
+  model: llama3.2
+
+# Guardrails are ON in dev so you can test them.
+# To disable everything: set enabled: false
+# To disable a single check: set e.g. ban_topics: false
+guardrails:
+  enabled: false
