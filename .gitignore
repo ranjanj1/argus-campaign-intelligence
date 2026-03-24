@@ -38,9 +38,14 @@ frontend/.env.production
 # macOS
 .DS_Store
 
-# Build context files
+# Build context / scratch files
 *_context.txt
 *_built_context.txt
+*.txt
+!scripts/prompts/*.txt
+
+# Claude settings
+.claude/
 
 # IDE
 .idea/
