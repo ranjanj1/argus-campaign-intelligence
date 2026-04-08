@@ -6,6 +6,12 @@
 
 ---
 
+## Architecture
+
+![Argus Architecture](Argus_arch.jpeg)
+
+---
+
 ## What Is Argus?
 
 Argus combines **pgvector** (semantic + full-text search) with **Neo4j** (entity relationship graph) in a LangGraph pipeline to answer questions that pure vector search cannot:
